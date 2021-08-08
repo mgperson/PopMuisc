@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Bootstrap CSS -->
+    <!-- build:css css/main.css -->
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css"/>
+    <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="node_modules/bootstrap-social/bootstrap-social.css"/>
+    <!-- endbuild -->
+
+    <title>Pop Music Song Generator</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-dark navbar-expand-sm fixed-top">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#Navbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="Navbar">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active"><a class="nav-link" href="./index.html"><span class="fa fa-home fa-lg"></span> Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./contactus.html"><span class="fa fa-address-card fa-lg"></span> Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./mysongs.html"><span class="fa fa-music">My Songs</span></a></li>
+                </ul>
+                </div>
+            </div>
+        </nav>
+        <header class="jumbotron">
+            <div class="container">
+                <h1 id='songTitle'></h1>
+                <h2> by Professor Muppala and the Funky Horns</h2>
+            </div>
+        </header>
+        <div class="container">
+            <div class="form-group row">
+                <h3>You selected the following parameters</h3>
+                <div>Key : <em><span id='key'>F#</span></em></div>
+                <div>Genre : <em><span id='genre'>motown</span></em></div>
+                <div>Topic: <em><span id='topic'>It's Friday Night and I want to party!</span></em></div>
+                <div>Format: <em><span id='format'>Verse,Chorus,Verse,Chorus,Verse,Chorus</span></em></div>
+            </div>
+            <div id="song">
+            </div>
+        </div>
+        </div>
+        <div class="col-sm-3 d-block" style="float:right">
+            <a class="btn btn-sm btn-block btn-danger px-5 text-dark" 
+            id="generateButton">
+                Save song</a>
+        </div>
+    </body>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>     
+    <script type="text/javascript">
+        const urlParams = new URLSearchParams(window.location.search);
+        const key = urlParams.get('key');
+        const format = urlParams.get('format');
+        const genre = urlParams.get('genre');
+        const topic = urlParams.get('topic');
+
+        if (key == 'Fsharp')
+            $('#key').text('F#');
+        else
+            $('#key').text(key);
+
+        $('#genre').text(genre);
+
+        if (topic == 1)
+            $('#topic').text("I love him/her/them but he/she/they doesn't love me back!");
+
+        else if (topic == 2)
+            $('#topic').text("Why can't the leaders of all the countries find peace???");
+
+        else if (topic == 3)
+            $('#topic').text("It's Friday Night and I want to party!");
+        else if (topic == 4)
+            $('#topic').text("Give me a mellow song about nature and mountains and stuff.");
+
+        $('#format').text(format.replaceAll('V','Verse').replaceAll('C','Chorus').replaceAll('B','Bridge'));
+
+
+        let chords;
+        if (key == 'C')
+            chords = ['C','D','Em','F','G7','Am','Bm']
+        else if (key == 'Fsharp')
+            chords = ['F#','G#','A#m','B','C#7','D#m','Fm']
+        else if (key == 'Am')
+            chords = ['Am','Bm','C','D','Em','F','G7']
+        else if (key == 'E')
+            chords = ['E','F#','G#m','A','B7','C#m','D#m']
+
+        let verseProgression;
+        let chorusProgression;
+        if (genre == 'motown'){
+            verseProgression = [chords[0],chords[3],chords[0],chords[4]];
+            chorusProgression = [chords[0],chords[5],chords[3],chords[4]];
+        }
+        else if (genre == 'country'){
+            verseProgression = [chords[0],chords[4],chords[5],chords[2]];
+            chorusProgression = [chords[0],chords[0],chords[4],chords[0]];
+        }
+        else if (genre == 'blues'){
+            verseProgression = [chords[0],chords[0],chords[3],chords[0]];
+            chorusProgression = [chords[4],chords[3],chords[0],chords[0]];
+        }
+        else if (genre == 'rock'){
+            verseProgression = [chords[0],chords[0],chords[3],chords[4]];
+            chorusProgression = [chords[0],chords[3],chords[4],chords[0]];
+        }
+
+        let songFormat;
+        if (format == '1'){
+            songFormat = ['V','C','V','C','V','C']
+        }
+        else if (format == '2'){
+            songFormat = ['V','V','V','C','C']
+        }
+        else if (format == '3'){
+            songFormat = ['V','C','V','C','B','C','C']
+        }
+
+        let songLyrics;
+        if (topic == '1'){
+            if (genre == 'motown'){
+                $('#songTitle').text("A Brand New Start");
+                songLyrics = {
+                    chorus: {
+                         1: "Oh darling let's turn around",
+                         2: 'And make a brand new start',
+                         3: "Can't you see that leaving me so",
+                        4 :"Has left a huge hole in my heart"
+                    },
+                    verse:{
+                        1:  {
+                                1: "I just don't feel the same",
+                                2: "Since you've gone away",
+                                3: "I wish your hand was in mine",
+                                4: "As we begin to sway" 
+                        },
+                        2: {
+                             1: "Stop and wait a minute",
+                            2: "Don't you want to save some love?",
+                            3: "Without you I'm so lonely",
+                            4: "It's like I'm wearing just one glove"
+                        },
+                        3: { 
+                            1: "Well I guess you'd",
+                            2: "Need to turn around and say",
+                            3: "Without you in my life",
+                            4: "I just can't feel this way"
+                        }
+                    }
+                }
+            }
+            else if (genre == 'country'){
+                $('#songTitle').text("That sweet sunset");
+                songLyrics = {
+                    chorus: {
+                         1: "Well the air don't smell so sweet",
+                         2: "And I just can't seem to see",
+                         3: 'That sweet sunset',
+                        4 :"Since my baby won't come back to me"
+                    },
+                    verse:{
+                        1:  {
+                                1: "Well my truck just broke down today",
+                                2: "The engine won't turn",
+                                3: "And my baby has left me",
+                                4: "It makes my heart burn" 
+                        },
+                        2: {
+                             1: "My dog just took off today",
+                            2: "Yeah he's not coming back",
+                            3: "And since you've gone away",
+                            4: "I'm gonna have to open my bags and pack"
+                        },
+                        3: { 
+                            1: "My neighbor came up to me",
+                            2: "And asked me what was wrong",
+                            3: "I thought it was plain to see",
+                            4: "And so I'll sing my song"
+                        }
+                    }
+                }
+            }
+            else if (genre == 'rock'){
+                $('#songTitle').text("A pass on this bus");
+                songLyrics = {
+                    chorus: {
+                         1: "She's got a pass on this bus",
+                         2: "She's got a pass on this bus",
+                         3: "She's got a pass on this bus",
+                        4 :"But she won't ride"
+                    },
+                    verse:{
+                        1:  {
+                                1: "I think that today",
+                                2: "I'm going to start feeling sad",
+                                3: "My baby's gone away",
+                                4: "And she's driving me mad" 
+                        },
+                        2: {
+                             1: "She said she'd never be happy",
+                            2: "Living with me",
+                            3: "She said when I was around",
+                            4: "She'd never feel free"
+                        },
+                        3: { 
+                            1: "I don't know why she thinks she can leave",
+                            2: "I thinks she's flying too high",
+                            3: "She'd better change her mind",
+                            4: "Before I say goodbye"
+                        }
+                    }
+                }
+            }
+            else if (genre == 'blues'){
+                $('#songTitle').text("Cloudy Weather");
+                songLyrics = {
+                    chorus: {
+                         1: "Oh I just can't go on",
+                         2: 'And all the skies are gray',
+                         3: "He's gone with the wind",
+                        4 :"And I can't find my way"
+                    },
+                    verse:{
+                        1:  {
+                                1: "Ain't no sun today",
+                                2: "And I'm in for cloudy weather",
+                                3: "He's left me all alone",
+                                4: "And we're not together" 
+                        },
+                        2: {
+                             1: "Well it's kind of hard to see",
+                            2: "With all this nasty weather",
+                            3: "I want it to dry up",
+                            4: "But looks like it will rain forever"
+                        },
+                        3: { 
+                            1: "I just can't clear my mind",
+                            2: "And I just can't clear this weather",
+                            3: "Since he's gone away",
+                            4: "The blues are here forever"
+                        }
+                    }
+                }
+            }
+        }
+        else if (topic == '2'){
+            if (genre == 'motown'){
+                $('#songTitle').text("What's happening?");
+                songLyrics = {
+                    chorus: {
+                         1: "Oh what's happening?",
+                         2: "What's happening?",
+                         3: "what's happening?",
+                        4 :"Can you please tell me?"
+                    },
+                    verse:{
+                        1:  {
+                                1: "There are too many wars in this world",
+                                2: "I'm calling out to you brother",
+                                3: "Let's bring everyone together",
+                                4: "And look out for each other" 
+                        },
+                        2: {
+                             1: "Well good god y'all",
+                            2: "Is there any point to war",
+                            3: "Please can you tell me",
+                            4: "Just what it's good for"
+                        },
+                        3: { 
+                            1: "Calling out the leaders",
+                            2: "In our world to unite",
+                            3: "To stop this silly violence",
+                            4: "And help us to unite"
+                        }
+                    }
+                }
+            }
+            else if (genre == 'country'){
+                $('#songTitle').text("This land is big enough");
+                songLyrics = {
+                    chorus: {
+                         1: 'Well this here land is big enough',
+                         2: "For both me and for you",
+                         3: "So let's get together",
+                        4 :"And make this dream come true"
+                    },
+                    verse:{
+                        1:  {
+                                1: "Well I just heard the news today",
+                                2: "It seems the world stopped turning",
+                                3: "Why We can't see eye to eye",
+                                4: "And stop this broken heart burning" 
+                        },
+                        2: {
+                             1: "I looked in my newborn's eyes",
+                            2: "Hoping for a message of peace",
+                            3: "I could see that we have a long way",
+                            4: "To make this fighting cease"
+                        },
+                        3: { 
+                            1: "Well can you hear",
+                            2: "The grand old thunder roll",
+                            3: "It's telling us to save ourselves",
+                            4: "And that peace is more valuable than gold"
+                        }
+                    }
+                }
+            }
+            else if (genre == 'rock'){
+                $('#songTitle').text("Consider");
+                songLyrics = {
+                    chorus: {
+                         1: 'Consider that everyone',
+                         2: 'Could live without a war?',
+                         3: "I hope you'll come and join us",
+                        4 :"No need to even the score"
+                    },
+                    verse:{
+                        1:  {
+                                1: "Well hear this call",
+                                2: "To all the leaders of the world",
+                                3: "Take a seat at the table",
+                                4: "And let your flags unfurl" 
+                        },
+                        2: {
+                             1: "Let the bells ring out",
+                            2: "Is that all?",
+                            3: "All is quiet today",
+                            4: "And I won't heed this call"
+                        },
+                        3: { 
+                            1: "What if we didn't have religion",
+                            2: "And didn't have any countries",
+                            3: "Couldn't we all get along",
+                            4: "What an opportunity"
+                        }
+                    }
+                }
+            }
+            else if (genre == 'blues'){
+                $('#songTitle').text("We've come too far together");
+                songLyrics = {
+                    chorus: {
+                         1: "Oh I just can't",
+                         2: 'Let my poor heart take a break',
+                         3: "We've come too far together",
+                        4 :"For goodness sake"
+                    },
+                    verse:{
+                        1:  {
+                                1: "Well my baby came over today",
+                                2: "And opened the first page of the news",
+                                3: "I couldn't help myself",
+                                4: "And started singing the blues" 
+                        },
+                        2: {
+                             1: "Well come a little bit closer",
+                            2: "And hear my heart beat",
+                            3: "And you can hear I need the leaders",
+                            4: "Of this land to come and meet"
+                        },
+                        3: { 
+                            1: "Oh won't you listen",
+                            2: "to this here guitar sing",
+                            3: "I walked up on the hill today",
+                            4: "To hear freedom ring"
+                        }
+                    }
+                }
+            }
+
+        }
+        else if (topic == '3'){
+            if (genre == 'motown'){
+                $('#songTitle').text("Let's Get The Groove Right on Friday Night!");
+                songLyrics = {
+                    chorus: {
+                         1: 'Before our time here is over',
+                         2: 'I need to make you see the light',
+                         3: 'So if you feel the way that I feel',
+                        4 :"Let's get the groove right on Friday night!"
+                    },
+                    verse:{
+                        1:  {
+                                1: "I'm getting down on a nice Friday  ",
+                                2: "And the mood inside is pretty groovy  ",
+                                3: "I can feel the pulse around me   ",
+                                4: "So let's go make our own movie" 
+                        },
+                        2: {
+                             1: "You know I'm in the mood to have a good time",
+                            2: "And I'm trying to make you understand",
+                            3: "That the good time could become a great time",
+                            4: "If you came over and held my hand  "
+                        },
+                        3: { 
+                            1: "You know this night won't last for long",
+                            2: "So come a bit closer and let's spark a romance",
+                            3: "It doesn't take too long to get started",
+                            4: "You just need to get out on the floor and dance"
+                        }
+                    }
+                }
+            }
+            else if (genre == 'country'){
+                $('#songTitle').text("Let's make this Friday night last a while");
+                songLyrics = {
+                    chorus: {
+                         1: 'Oh darling having you close to me',
+                         2: "I can't help but make my lips smile",
+                         3: 'So while the stars are out',
+                        4 :"Let's make this Friday night last a while"
+                    },
+                    verse:{
+                        1:  {
+                                1: "Well I finished with the day's work",
+                                2: "And I thank god it's a Friday",
+                                3: "And now that you're here with me",
+                                4: "I've just got to hear you say" 
+                        },
+                        2: {
+                             1: "Well I don't think I'll lose my mind",
+                            2: "if I open one more can of beer",
+                            3: "So I'll drink myself to a good mood",
+                            4: "And be grateful that you're here"
+                        },
+                        3: { 
+                            1: "Well I know these days don't last forever",
+                            2: "And this night must come to an end soon",
+                            3: "But while our hearts our near together",
+                            4: "We'll lose ourselves in the moon"
+                        }
+                    }
+                }
+            }
+            else if (genre == 'rock'){
+                $('#songTitle').text("Tell me that you're mine!");
+                songLyrics = {
+                    chorus: {
+                         1: 'I need you I need you',
+                         2: 'Need you to hold me tight',
+                         3: "And tell me that you're mine",
+                        4 :"On this Friday night!"
+                    },
+                    verse:{
+                        1:  {
+                                1: "Oh yeah please on this Friday",
+                                2: "Won't you try to understand",
+                                3: "And come join me",
+                                4: "And come and take my hand" 
+                        },
+                        2: {
+                             1: "Well it's been a long time",
+                            2: "Since the jukebox played that rock",
+                            3: "And it's been a long time",
+                            4: "Since this boat left the dock"
+                        },
+                        3: { 
+                            1: "I just have to tell the truth",
+                            2: "I don't want to be a liar",
+                            3: "So let me say to you",
+                            4: "We can set this Friday on fire!"
+                        }
+                    }
+                }
+            }
+            else if (genre == 'blues'){
+                $('#songTitle').text("Let go on this Friday");
+                songLyrics = {
+                    chorus: {
+                         1: 'Oh yeah baby baby baby',
+                         2: 'Can you help me find my way',
+                         3: "I've got so much sorrow inside me",
+                        4 :"To let go on this Friday"
+                    },
+                    verse:{
+                        1:  {
+                                1: "Well I'm sitting here inside",
+                                2: "Inside on this Friday",
+                                3: "And if you'll come and join me",
+                                4: "We'll put these blues away" 
+                        },
+                        2: {
+                             1: "It's getting a bit hard",
+                            2: "A bit hard to see",
+                            3: "So baby won't you come close",
+                            4: "A little closer to me"
+                        },
+                        3: { 
+                            1: "Well if you'd only stay forever",
+                            2: "And say that you're my baby",
+                            3: "This Friday could go on",
+                            4: "And never ever fail me"
+                        }
+                    }
+                }
+            }
+        }
+        else if (topic == '4'){
+            if (genre == 'motown'){
+                $('#songTitle').text("Let's watch the sun go down together");
+                songLyrics = {
+                    chorus: {
+                         1: 'Oh listen to the songbird sing',
+                         2: 'Sweeter than the month of May',
+                         3: "And we'll watch the sun go down together",
+                        4 :"Losing ourselves along the way"
+                    },
+                    verse:{
+                        1:  {
+                            1: "Sitting here at the bay",
+                                2: "At the edge of the pier",
+                                3: "Brighter than the light of day",
+                                4: "It begins to feel so clear" 
+                        },
+                        2: {
+                             1: "Deeper than the ocean blue",
+                            2: "And higher than the summer sky",
+                            3: "I like the way I feel",
+                            4: "As I watch the clouds roll by"
+                        },
+                        3: { 
+                            1: "The mountain ain't high enough",
+                            2: "And the river ain't too wide",
+                            3: "To keep me from coming to you",
+                            4: "And standing by your side"
+                        }
+                    }
+                }
+            }
+            else if (genre == 'country'){
+                $('#songTitle').text("Sierra Mountain Snow");
+                songLyrics = {
+                    chorus: {
+                         1: 'Sierra Mountain Snow, California',
+                         2: "Sierra Mountain Snow, California",
+                         3: 'Sierra Mountain Snow, California',
+                        4 :"Sierra Mountain Snow, California"
+                    },
+                    verse:{
+                        1:  {
+                                1: "Well I made my plan to leave today",
+                                2: "Bought a ticket for the train",
+                                3: "I'm gone for the time being",
+                                4: "But I'll be back again" 
+                        },
+                        2: {
+                             1: "From the northern fairlands",
+                            2: "To the southern everglades",
+                            3: "This land is beautiful",
+                            4: "For you and me it was made"
+                        },
+                        3: { 
+                            1: "Well it's time again",
+                            2: "To get back out on the street",
+                            3: "Before the autumn leaves fall",
+                            4: "Before we get a chance to meet"
+                        }
+                    }
+                }
+            }
+            else if (genre == 'rock'){
+                $('#songTitle').text("The Robin's Song");
+                songLyrics = {
+                    chorus: {
+                            1: "Tweet Tweet goes the Robin",
+                                2: "Tweet tweet all day long",
+                                3: "When I'm feeling down",
+                                4: "I listen to her song" 
+                    },
+                    verse:{
+                        1:  {
+                                1: "Climbing on every mountain",
+                                2: "Taking a misty hop",
+                                3: "Once I get started",
+                                4: "You know that I can't stop" 
+                        },
+                        2: {
+                             1: "When I feel lost",
+                            2: "The ocean is my friend",
+                            3: "I sit and watch it",
+                            4: "Until my troubles end"
+                        },
+                        3: { 
+                            1: "We'll be together forever",
+                            2: "Until the skies stop the snow",
+                            3: "As long as you're here with me",
+                            4: "I won't let you go"
+                        }
+                    }
+                }
+            }
+            else if (genre == 'blues'){
+                $('#songTitle').text("The sky won't clear up");
+                songLyrics = {
+                    chorus: {
+                         1: "The sky just won't clear up",
+                         2: "Well there be an end to the rain",
+                         3: "Sitting here by my lonesome self",
+                        4 :"The blues walked in again"
+                    },
+                    verse:{
+                        1:  {
+                                1: "I've seen the sun just up",
+                                2: "And leave the majestic sky",
+                                3: "But I wish before it left",
+                                4: "It would wish me a good bye" 
+                        },
+                        2: {
+                             1: "I stare in great awe",
+                            2: "At the deep ocean blue",
+                            3: "But no matter how much it eases me",
+                            4: "It's not the same without you"
+                        },
+                        3: { 
+                            1: "When I gaze at the weeping willows",
+                            2: "I have to sit down and cry",
+                            3: "It makes me feel so bad",
+                            4: "And I let out a sigh"
+                        }
+                    }
+                }
+            }
+        }
+
+        let verseNumber = 0;
+        for (let i=0; i < format.length;i++){
+            
+            const segment = format[i];
+            if (segment == 'V' || segment == 'B')
+                verseNumber++;
+
+            $('#song').append('<div class="form-group row">');
+                if(segment == 'V')
+                    $('#song').append('<h3>Verse ' + verseNumber.toString() + '</h3>');
+                else if(segment == 'C')
+                    $('#song').append('<h3>Chorus</h3>');
+                else if(segment == 'B')
+                    $('#song').append('<h3>Bridge</h3>');
+            for (let j = 0; j < 4; j++){
+                if (segment == 'C'){
+                    $('#song').append('<p>' + chorusProgression[j] + '</p>');
+                    $('#song').append('<p>' + songLyrics.chorus[j+1] + '</p>');
+                }
+                if (segment == 'V' || segment == 'B'){
+                    $('#song').append('<p>' + verseProgression[j] + '</p>');
+                    $('#song').append('<p>' + songLyrics.verse[verseNumber][j+1] + '</p>');
+                }
+            }
+            $('#song').append('</div>');    
+        }
+
+        
+    </script>
+</html>

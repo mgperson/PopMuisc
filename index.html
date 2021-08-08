@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Bootstrap CSS -->
+    <!-- build:css css/main.css -->
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="node_modules/bootstrap-social/bootstrap-social.css"/>
+    <!-- endbuild -->
+
+    <title>Pop Music Song Generator</title>
+
+</head>
+<body>
+    
+    <nav class="navbar navbar-dark navbar-expand-sm fixed-top">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#Navbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="Navbar">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active"><a class="nav-link" href="./index.html"><span class="fa fa-home fa-lg"></span> Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="./contactus.html"><span class="fa fa-address-card fa-lg"></span> Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="./mysongs.html"><span class="fa fa-music">My Songs</span></a></li>
+            </ul>
+            </div>
+        </div>
+    </nav>
+    <header class="jumbotron">
+        <div class="container">
+            <div class="row row-header align-items-center">
+                <div class="col-12">
+                <h1>Pop Music Song Generator</h1>
+                <h2>Generate the next top Billboard 100 today!</h2>
+                <p>Let's get started. Go ahead and answer the questions below and we will generate you a chart-topping hit instantly. </p>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="form-group row">
+            <label>What key should the song be in?</label>
+            <select class="form-select" id='key'>
+                <option selected>C</option>
+                <option value="Fsharp">F#</option>
+                <option>Am</option>
+                <option>E</option>
+            </select>
+        </div>
+    </div>
+    <div class="container">
+        <div class="form-group row">
+            <label>Pick a song genre!</label>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" value="country" name="genre" checked> Country
+                </label>
+              </div>
+              <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" value="motown" name="genre"> Motown
+                </label>
+              </div>
+              <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" value="rock" name="genre"> Rock and Roll
+                </label>
+              </div>
+              <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" value="blues" name="genre"> Blues
+                </label>
+              </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="form-group row">
+            <label>What should your chart topper be about?</label>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" value="1" name="topic" checked> I love him/her/them but he/she/they doesn't love me back!
+                </label>
+              </div>
+              <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" value="2" name="topic"> Why can't the leaders of all the countries find peace???
+                </label>
+              </div>
+              <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" value="3" name="topic"> It's Friday Night and I want to party!
+                </label>
+              </div>
+              <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" value="4" name="topic"> Give me a mellow song about nature and mountains and stuff.
+                </label>
+              </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="form-group row">
+            <label>How should we format the song?? </label>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" value="VCVCVC" checked name="format"> Nothing fancy! Verse, Chorus, Verse, Chorus, Verse, Chorus
+                </label>
+              </div>
+              <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" value="VVVCC" name="format"> Let's create a building song! Verse, Verse, Verse, Chorus, Chorus
+                </label>
+              </div>
+              <div class="form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" value="VCVCBCC" name="format"> I'm going to have the catchiest chorus of all time so I need it played many times! Verse, Chorus, Verse, Chorus, Bridge, Chorus, Chorus
+                </label>
+              </div>            
+        </div>
+    </div>
+    <div class="col-sm-3 d-block" style="float:right">
+        <a class="btn btn-sm btn-block btn-danger px-5 text-dark" 
+        id="generateButton">
+            Generate Song!!!</a>
+    </div>
+    <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      $('#generateButton').click(function(){
+        window.location.href = 'song.html?key=' + $('#key').val() + '&genre=' + $('input[name="genre"]:checked').val()
+        + '&topic=' + $('input[name="topic"]:checked').val()+ '&format=' + $('input[name="format"]:checked').val();
+      });
+    </script>
+</body>
+</html>
